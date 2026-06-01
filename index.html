@@ -108,6 +108,26 @@
       background: black;
       margin-top: 50px;
     }
+
+    .login {
+      text-align: center;
+      margin: 60px 0;
+    }
+
+    input {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -154,6 +174,57 @@
 <footer>
   © 2026 Mundial de Futebol - Site de demonstração
 </footer>
+
+<!-- 🔐 LOGIN -->
+<div class="login">
+  <h2>🔐 Login</h2>
+
+  <input id="email" type="email" placeholder="Email">
+  <br>
+
+  <input id="password" type="password" placeholder="Password">
+  <br>
+
+  <button onclick="login()">Entrar</button>
+  <button onclick="registar()">Registar</button>
+</div>
+
+<!-- 🔥 FIREBASE (SÓ ESTE, CORRIGIDO) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAnIFgtOrhHJ6BoOlmqdm_-GXd3tMdJ7VU",
+    authDomain: "meu-mundial-site.firebaseapp.com",
+    projectId: "meu-mundial-site",
+    storageBucket: "meu-mundial-site.appspot.com",
+    messagingSenderId: "197615724258",
+    appId: "1:197615724258:web:c17231a79b9363f43a60bb"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  window.login = function () {
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => alert("Login feito com sucesso!"))
+      .catch(err => alert(err.message));
+  }
+
+  window.registar = function () {
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => alert("Conta criada com sucesso!"))
+      .catch(err => alert(err.message));
+  }
+</script>
 
 </body>
 </html>
