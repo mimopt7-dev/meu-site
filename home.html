@@ -7,45 +7,127 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial;
-      background: linear-gradient(to bottom, #0b3d91, #111827);
+      font-family: Arial, sans-serif;
+      background: #111827;
       color: white;
-      text-align: center;
-      padding: 60px;
+      display: flex;
     }
 
-    .box {
-      margin-top: 80px;
-      background: rgba(255,255,255,0.1);
-      padding: 40px;
-      border-radius: 15px;
-      display: inline-block;
+    /* MENU ESQUERDO */
+    .sidebar {
+      width: 220px;
+      background: #0b3d91;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
+    .sidebar h2 {
+      color: #facc15;
+      margin-bottom: 30px;
+    }
+
+    .menu button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
       border: none;
-      border-radius: 10px;
-      background: #facc15;
-      font-weight: bold;
+      border-radius: 8px;
       cursor: pointer;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      text-align: left;
     }
+
+    .menu button:hover {
+      background: #facc15;
+      color: black;
+    }
+
+    /* CONTEÚDO */
+    .content {
+      flex: 1;
+      padding: 30px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #facc15;
+    }
+
   </style>
 </head>
 
 <body>
 
-  <h1>⚽ Mundial 2026</h1>
+  <!-- MENU LATERAL -->
+  <div class="sidebar">
+    <h2>⚽ Mundial</h2>
 
-  <div class="box">
-    <h2>Bem-vindo!</h2>
-    <p>Login feito com sucesso 🎉</p>
+    <div class="menu">
+      <button onclick="showEquipas()">Equipas</button>
+      <button onclick="showCalendario()">Calendário</button>
+      <button onclick="logout()">Sair</button>
+    </div>
+  </div>
 
-    <button onclick="logout()">Sair</button>
+  <!-- CONTEÚDO -->
+  <div class="content">
+
+    <h1 id="titulo">Bem-vindo 👋</h1>
+
+    <div id="area">
+
+      <div class="card">
+        <h3>Seleciona uma opção no menu</h3>
+        <p>Equipas ou Calendário aparecem aqui</p>
+      </div>
+
+    </div>
   </div>
 
   <script>
+    function showEquipas() {
+      document.getElementById("titulo").innerText = "⚽ Equipas";
+
+      document.getElementById("area").innerHTML = `
+        <div class="card">
+          <h3>Portugal</h3>
+        </div>
+        <div class="card">
+          <h3>Brasil</h3>
+        </div>
+        <div class="card">
+          <h3>França</h3>
+        </div>
+        <div class="card">
+          <h3>Argentina</h3>
+        </div>
+      `;
+    }
+
+    function showCalendario() {
+      document.getElementById("titulo").innerText = "📅 Calendário";
+
+      document.getElementById("area").innerHTML = `
+        <div class="card">
+          <h3>Portugal vs Brasil</h3>
+          <p>12 Junho 2026</p>
+        </div>
+
+        <div class="card">
+          <h3>França vs Argentina</h3>
+          <p>13 Junho 2026</p>
+        </div>
+      `;
+    }
+
     function logout() {
       window.location.href = "index.html";
     }
