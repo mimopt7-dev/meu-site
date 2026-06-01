@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Home - Mundial 2026</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: linear-gradient(to bottom, #0b3d91, #111827);
+      color: white;
+      text-align: center;
+      padding: 60px;
+    }
+
+    .box {
+      margin-top: 80px;
+      background: rgba(255,255,255,0.1);
+      padding: 40px;
+      border-radius: 15px;
+      display: inline-block;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background: #facc15;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>⚽ Mundial 2026</h1>
+
+  <div class="box">
+    <h2>Bem-vindo!</h2>
+    <p>Login feito com sucesso 🎉</p>
+
+    <button onclick="logout()">Sair</button>
+  </div>
+
+  <script>
+    function logout() {
+      window.location.href = "index.html";
+    }
+  </script>
+
+</body>
+</html>
