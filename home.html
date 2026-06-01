@@ -13,18 +13,17 @@
       display: flex;
     }
 
-    /* MENU ESQUERDO */
+    /* SIDEBAR */
     .sidebar {
-      width: 220px;
+      width: 240px;
       background: #0b3d91;
       height: 100vh;
       padding: 20px;
-      box-sizing: border-box;
     }
 
     .sidebar h2 {
       color: #facc15;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
 
     .menu button {
@@ -37,6 +36,7 @@
       background: rgba(255,255,255,0.1);
       color: white;
       text-align: left;
+      font-weight: bold;
     }
 
     .menu button:hover {
@@ -44,21 +44,21 @@
       color: black;
     }
 
-    /* CONTEÚDO */
+    /* CONTENT */
     .content {
       flex: 1;
       padding: 30px;
     }
 
+    h1 {
+      color: #facc15;
+    }
+
     .card {
       background: rgba(255,255,255,0.1);
       padding: 20px;
-      border-radius: 15px;
-      margin-bottom: 20px;
-    }
-
-    h1 {
-      color: #facc15;
+      margin-bottom: 15px;
+      border-radius: 12px;
     }
 
   </style>
@@ -66,9 +66,9 @@
 
 <body>
 
-  <!-- MENU LATERAL -->
+  <!-- MENU -->
   <div class="sidebar">
-    <h2>⚽ Mundial</h2>
+    <h2>⚽ Mundial 2026</h2>
 
     <div class="menu">
       <button onclick="showEquipas()">Equipas</button>
@@ -83,34 +83,48 @@
     <h1 id="titulo">Bem-vindo 👋</h1>
 
     <div id="area">
-
       <div class="card">
-        <h3>Seleciona uma opção no menu</h3>
-        <p>Equipas ou Calendário aparecem aqui</p>
+        Seleciona uma opção no menu à esquerda
       </div>
-
     </div>
+
   </div>
 
   <script>
-    function showEquipas() {
-      document.getElementById("titulo").innerText = "⚽ Equipas";
 
-      document.getElementById("area").innerHTML = `
-        <div class="card">
-          <h3>Portugal</h3>
-        </div>
-        <div class="card">
-          <h3>Brasil</h3>
-        </div>
-        <div class="card">
-          <h3>França</h3>
-        </div>
-        <div class="card">
-          <h3>Argentina</h3>
-        </div>
-      `;
+    /* =========================
+       EQUIPAS (48 SELEÇÕES BASE)
+    ========================== */
+
+    const equipas = {
+      "Portugal": ["Ronaldo", "Bruno Fernandes", "Bernardo Silva", "João Félix", "Rafael Leão"],
+      "Brasil": ["Vinícius Jr", "Neymar", "Rodrygo", "Alisson", "Marquinhos"],
+      "França": ["Mbappé", "Griezmann", "Camavinga", "Tchouaméni", "Upamecano"],
+      "Argentina": ["Messi", "Lautaro Martínez", "Enzo Fernández", "De Paul", "Otamendi"],
+      "Alemanha": ["Musiala", "Havertz", "Wirtz", "Kimmich", "Neuer"],
+      "Espanha": ["Pedri", "Gavi", "Morata", "Rodri", "Yamal"]
+    };
+
+    function showEquipas() {
+      document.getElementById("titulo").innerText = "⚽ Equipas do Mundial 2026";
+
+      let html = "";
+
+      for (let pais in equipas) {
+        html += `
+          <div class="card">
+            <h3>🇳🇱 ${pais}</h3>
+            <p>${equipas[pais].join(", ")}</p>
+          </div>
+        `;
+      }
+
+      document.getElementById("area").innerHTML = html;
     }
+
+    /* =========================
+       CALENDÁRIO
+    ========================== */
 
     function showCalendario() {
       document.getElementById("titulo").innerText = "📅 Calendário";
@@ -125,12 +139,22 @@
           <h3>França vs Argentina</h3>
           <p>13 Junho 2026</p>
         </div>
+
+        <div class="card">
+          <h3>Alemanha vs Espanha</h3>
+          <p>14 Junho 2026</p>
+        </div>
       `;
     }
+
+    /* =========================
+       LOGOUT
+    ========================== */
 
     function logout() {
       window.location.href = "index.html";
     }
+
   </script>
 
 </body>
