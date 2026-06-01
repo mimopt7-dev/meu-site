@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>Mundial 2026 - Dashboard</title>
+<title>Mundial 2026</title>
 
 <style>
 body {
@@ -13,13 +13,12 @@ body {
   display: flex;
 }
 
-/* SIDEBAR */
+/* MENU */
 .sidebar {
   width: 250px;
   background: #0b3d91;
   height: 100vh;
   padding: 20px;
-  overflow-y: auto;
 }
 
 .sidebar h2 {
@@ -30,11 +29,11 @@ button {
   width: 100%;
   padding: 10px;
   margin: 5px 0;
-  background: rgba(255,255,255,0.1);
   border: none;
-  color: white;
   border-radius: 8px;
   cursor: pointer;
+  background: rgba(255,255,255,0.1);
+  color: white;
 }
 
 button:hover {
@@ -53,21 +52,13 @@ button:hover {
   padding: 15px;
   margin: 10px 0;
   border-radius: 10px;
+  cursor: pointer;
 }
 
-/* BANNER */
-.banner {
-  background: rgba(255,255,255,0.08);
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-.banner img {
-  width: 100%;
-  max-width: 500px;
-  border-radius: 12px;
+.card:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.01);
+  transition: 0.2s;
 }
 </style>
 </head>
@@ -77,23 +68,14 @@ button:hover {
 <div class="sidebar">
   <h2>⚽ Mundial 2026</h2>
 
-  <button onclick="showHome()">Início</button>
   <button onclick="showTeams()">Equipas (48)</button>
   <button onclick="showCalendar()">Calendário</button>
-  <button onclick="logout()">Sair</button>
+  <button onclick="showHome()">Início</button>
 </div>
 
 <div class="content">
 
   <h1 id="title">Bem-vindo 👋</h1>
-
-  <!-- 🇵🇹 BANNER -->
-  <div class="banner">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Portugal_national_football_team_2018.jpg">
-    <h2 style="color:#facc15;">Seleção Nacional de Portugal 🇵🇹</h2>
-    <p>Bem-vindo ao teu portal do Mundial 2026</p>
-  </div>
-
   <div id="area"></div>
 
 </div>
@@ -101,73 +83,86 @@ button:hover {
 <script>
 
 /* =========================
-   EQUIPAS (48 + estrelas reais)
+   48 SELEÇÕES + BANDEIRAS
 ========================= */
 
 const teams = {
-  "Portugal": ["Cristiano Ronaldo", "Bruno Fernandes", "Bernardo Silva", "João Félix", "Rafael Leão", "Diogo Costa"],
-  "Brasil": ["Vinícius Jr", "Neymar", "Rodrygo", "Alisson", "Marquinhos", "Casemiro"],
-  "Argentina": ["Messi", "Lautaro Martínez", "Enzo Fernández", "De Paul", "Álvarez"],
-  "França": ["Mbappé", "Griezmann", "Tchouaméni", "Camavinga", "Upamecano"],
-  "Alemanha": ["Musiala", "Wirtz", "Kimmich", "Havertz", "Neuer"],
-  "Espanha": ["Pedri", "Gavi", "Rodri", "Yamal", "Morata"],
-  "Inglaterra": ["Kane", "Bellingham", "Saka", "Foden", "Rice"],
-  "Itália": ["Donnarumma", "Barella", "Chiesa", "Raspadori", "Tonali"],
-  "Holanda": ["De Jong", "Van Dijk", "Gakpo", "Simons", "Ake"],
-  "Bélgica": ["De Bruyne", "Lukaku", "Trossard", "Onana", "Carrasco"],
+  "🇵🇹 Portugal": ["Ronaldo", "Bruno Fernandes", "Bernardo Silva", "João Félix", "Rafael Leão"],
+  "🇧🇷 Brasil": ["Vinícius Jr", "Neymar", "Rodrygo", "Alisson", "Casemiro"],
+  "🇦🇷 Argentina": ["Messi", "Lautaro Martínez", "Enzo Fernández", "De Paul"],
+  "🇫🇷 França": ["Mbappé", "Griezmann", "Camavinga", "Tchouaméni"],
+  "🇩🇪 Alemanha": ["Musiala", "Wirtz", "Kimmich", "Havertz"],
+  "🇪🇸 Espanha": ["Pedri", "Gavi", "Rodri", "Yamal"],
+  "🏴 Inglaterra": ["Kane", "Bellingham", "Saka", "Foden"],
+  "🇮🇹 Itália": ["Donnarumma", "Barella", "Chiesa", "Tonali"],
+  "🇳🇱 Holanda": ["De Jong", "Van Dijk", "Gakpo", "Simons"],
+  "🇧🇪 Bélgica": ["De Bruyne", "Lukaku", "Trossard"],
 
-  "Uruguai": ["Valverde", "Núñez", "Bentancur", "Araujo", "Suaréz"],
-  "Croácia": ["Modric", "Kovacic", "Gvardiol", "Perisic", "Livakovic"],
-  "México": ["Jiménez", "Lozano", "Ochoa", "Álvarez", "Corona"],
-  "EUA": ["Pulisic", "Reyna", "McKennie", "Weah", "Dest"],
-  "Canadá": ["David", "Buchanan", "Larin", "Eustaquio", "Koné"],
+  "🇺🇾 Uruguai": ["Valverde", "Núñez", "Bentancur"],
+  "🇭🇷 Croácia": ["Modric", "Kovacic", "Gvardiol"],
+  "🇲🇽 México": ["Jiménez", "Lozano", "Ochoa"],
+  "🇺🇸 EUA": ["Pulisic", "McKennie", "Reyna"],
+  "🇨🇦 Canadá": ["David", "Larin", "Buchanan"],
 
-  "Japão": ["Kubo", "Mitoma", "Endo", "Ito", "Kamada"],
-  "Coreia do Sul": ["Son Heung-min", "Kim Min-jae", "Hwang", "Lee Kang-in", "Jung"],
-  "Austrália": ["Ryan", "Leckie", "Boyle", "Goodwin", "Mooy"],
-  "Marrocos": ["Hakimi", "Ziyech", "En-Nesyri", "Amrabat", "Bounou"],
-  "Senegal": ["Mané", "Koulibaly", "Mendy", "Sarr", "Diatta"],
+  "🇯🇵 Japão": ["Kubo", "Mitoma", "Endo"],
+  "🇰🇷 Coreia do Sul": ["Son Heung-min", "Kim Min-jae", "Lee Kang-in"],
+  "🇦🇺 Austrália": ["Ryan", "Leckie", "Boyle"],
+  "🇲🇦 Marrocos": ["Hakimi", "Ziyech", "En-Nesyri"],
+  "🇸🇳 Senegal": ["Mané", "Koulibaly", "Mendy"],
 
-  "Suíça": ["Xhaka", "Shaqiri", "Sow", "Akanji", "Freuler"],
-  "Dinamarca": ["Eriksen", "Højbjerg", "Dolberg", "Hjulmand", "Schmeichel"],
-  "Noruega": ["Haaland", "Ødegaard", "Sørloth", "Ryerson", "Ajer"],
-  "Polónia": ["Lewandowski", "Zielinski", "Szczesny", "Kiwior", "Cash"],
+  "🇨🇭 Suíça": ["Xhaka", "Shaqiri", "Akanji"],
+  "🇩🇰 Dinamarca": ["Eriksen", "Højbjerg", "Schmeichel"],
+  "🇳🇴 Noruega": ["Haaland", "Ødegaard", "Sørloth"],
+  "🇵🇱 Polónia": ["Lewandowski", "Zielinski", "Szczesny"],
 
-  "Chile": ["Alexis Sánchez", "Vidal", "Brereton", "Diaz", "Pulgar"],
-  "Colômbia": ["Luis Díaz", "James Rodríguez", "Duran", "Ospina", "Cuadrado"],
-  "Equador": ["Caicedo", "Valencia", "Hincapié", "Estupiñán", "Plata"],
-  "Peru": ["Guerrero", "Cueva", "Tapia", "Gallese", "Carrillo"],
+  "🇨🇱 Chile": ["Alexis Sánchez", "Vidal", "Brereton"],
+  "🇨🇴 Colômbia": ["Luis Díaz", "James", "Duran"],
+  "🇪🇨 Equador": ["Caicedo", "Hincapié", "Valencia"],
+  "🇵🇪 Peru": ["Guerrero", "Cueva", "Tapia"],
 
-  "Nigéria": ["Osimhen", "Iwobi", "Ndidi", "Chukwueze", "Bassey"],
-  "Gana": ["Partey", "Ayew", "Inaki Williams", "Lamptey", "Salisu"],
-  "Camarões": ["Aboubakar", "Onana", "Anguissa", "Toko Ekambi", "Choupo-Moting"]
+  "🇳🇬 Nigéria": ["Osimhen", "Iwobi", "Ndidi"],
+  "🇬🇭 Gana": ["Partey", "Ayew", "Inaki Williams"],
+  "🇨🇲 Camarões": ["Aboubakar", "Onana", "Anguissa"],
+
+  "🇪🇬 Egito": ["Salah", "Elneny", "Hegazi"],
+  "🇩🇿 Argélia": ["Mahrez", "Bounedjah", "Atal"],
+  "🇹🇳 Tunísia": ["Sliti", "Dräger", "Maaloul"],
+
+  "🇮🇷 Irão": ["Taremi", "Azmoun", "Hajsafi"],
+  "🇸🇦 Arábia Saudita": ["Al-Dawsari", "Al-Shehri", "Al-Owais"],
+  "🇶🇦 Qatar": ["Afif", "Almoez Ali", "Hassan"],
+
+  "🇵🇦 Panamá": ["Carrasquilla", "Gómez", "Escobar"],
+  "🇨🇷 Costa Rica": ["Navas", "Campbell", "Borges"],
+  "🇭🇳 Honduras": ["Quioto", "Lozano", "Menjívar"]
 };
 
 /* ========================= */
-
-function showHome() {
-  document.getElementById("title").innerText = "Bem-vindo 👋";
-
-  document.getElementById("area").innerHTML = `
-    <div class="card">
-      Portal oficial do Mundial 2026 ⚽
-    </div>
-  `;
-}
 
 function showTeams() {
   document.getElementById("title").innerText = "⚽ Equipas do Mundial 2026";
 
   let html = "";
 
-  for (let t in teams) {
+  for (let team in teams) {
     html += `
-      <div class="card">
-        <h3>${t}</h3>
-        <p>${teams[t].join(", ")}</p>
+      <div class="card" onclick="showPlayers('${team}')">
+        ${team}
       </div>
     `;
   }
+
+  document.getElementById("area").innerHTML = html;
+}
+
+function showPlayers(team) {
+  document.getElementById("title").innerText = team;
+
+  let html = `<div class="card" onclick="showTeams()">⬅ Voltar</div>`;
+
+  teams[team].forEach(player => {
+    html += `<div class="card">${player}</div>`;
+  });
 
   document.getElementById("area").innerHTML = html;
 }
@@ -176,14 +171,18 @@ function showCalendar() {
   document.getElementById("title").innerText = "📅 Calendário";
 
   document.getElementById("area").innerHTML = `
-    <div class="card">Portugal vs Brasil - 12 Junho</div>
-    <div class="card">França vs Argentina - 13 Junho</div>
-    <div class="card">Espanha vs Alemanha - 14 Junho</div>
+    <div class="card">Portugal vs Brasil</div>
+    <div class="card">França vs Argentina</div>
+    <div class="card">Espanha vs Alemanha</div>
   `;
 }
 
-function logout() {
-  window.location.href = "index.html";
+function showHome() {
+  document.getElementById("title").innerText = "Bem-vindo 👋";
+
+  document.getElementById("area").innerHTML = `
+    <div class="card">Seleciona uma equipa para ver jogadores ⚽</div>
+  `;
 }
 
 </script>
