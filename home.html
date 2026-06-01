@@ -1,161 +1,173 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <title>Home - Mundial 2026</title>
+<meta charset="UTF-8">
+<title>Mundial 2026</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #111827;
-      color: white;
-      display: flex;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #111827;
+  color: white;
+  display: flex;
+}
 
-    /* SIDEBAR */
-    .sidebar {
-      width: 240px;
-      background: #0b3d91;
-      height: 100vh;
-      padding: 20px;
-    }
+/* MENU */
+.sidebar {
+  width: 250px;
+  background: #0b3d91;
+  height: 100vh;
+  padding: 20px;
+  overflow-y: auto;
+}
 
-    .sidebar h2 {
-      color: #facc15;
-      margin-bottom: 20px;
-    }
+.sidebar h2 {
+  color: #facc15;
+}
 
-    .menu button {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 10px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background: rgba(255,255,255,0.1);
-      color: white;
-      text-align: left;
-      font-weight: bold;
-    }
+button {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-    .menu button:hover {
-      background: #facc15;
-      color: black;
-    }
+button:hover {
+  background: #facc15;
+  color: black;
+}
 
-    /* CONTENT */
-    .content {
-      flex: 1;
-      padding: 30px;
-    }
+/* CONTENT */
+.content {
+  flex: 1;
+  padding: 20px;
+}
 
-    h1 {
-      color: #facc15;
-    }
-
-    .card {
-      background: rgba(255,255,255,0.1);
-      padding: 20px;
-      margin-bottom: 15px;
-      border-radius: 12px;
-    }
-
-  </style>
+.card {
+  background: rgba(255,255,255,0.1);
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+}
+</style>
 </head>
 
 <body>
 
-  <!-- MENU -->
-  <div class="sidebar">
-    <h2>⚽ Mundial 2026</h2>
+<div class="sidebar">
+  <h2>⚽ Mundial 2026</h2>
+  <button onclick="showTeams()">Equipas (48)</button>
+  <button onclick="showCalendar()">Calendário</button>
+  <button onclick="logout()">Sair</button>
+</div>
 
-    <div class="menu">
-      <button onclick="showEquipas()">Equipas</button>
-      <button onclick="showCalendario()">Calendário</button>
-      <button onclick="logout()">Sair</button>
-    </div>
-  </div>
+<div class="content">
+  <h1 id="title">Bem-vindo 👋</h1>
+  <div id="area"></div>
+</div>
 
-  <!-- CONTEÚDO -->
-  <div class="content">
+<script>
 
-    <h1 id="titulo">Bem-vindo 👋</h1>
+/* =========================
+   48 SELEÇÕES (BASE MVP)
+========================= */
 
-    <div id="area">
+const teams = {
+  "Portugal": ["Ronaldo", "Bruno Fernandes", "Bernardo Silva"],
+  "Brasil": ["Vinícius Jr", "Neymar", "Rodrygo"],
+  "Argentina": ["Messi", "Lautaro", "Enzo Fernández"],
+  "França": ["Mbappé", "Griezmann", "Tchouaméni"],
+  "Alemanha": ["Musiala", "Wirtz", "Kimmich"],
+  "Espanha": ["Pedri", "Gavi", "Rodri"],
+  "Inglaterra": ["Bellingham", "Kane", "Saka"],
+  "Itália": ["Donnarumma", "Chiesa", "Barella"],
+  "Holanda": ["De Jong", "Gakpo", "Van Dijk"],
+  "Bélgica": ["De Bruyne", "Lukaku", "Trossard"],
+
+  "Uruguai": ["Valverde", "Núñez", "Bentancur"],
+  "Croácia": ["Modrić", "Kovačić", "Gvardiol"],
+  "México": ["Jiménez", "Lozano", "Ochoa"],
+  "Estados Unidos": ["Pulisic", "Reyna", "McKennie"],
+  "Canadá": ["David", "Larin", "Buchanan"],
+
+  "Japão": ["Kubo", "Mitoma", "Endo"],
+  "Coreia do Sul": ["Son Heung-min", "Hwang", "Kim Min-jae"],
+  "Austrália": ["Leckie", "Boyle", "Ryan"],
+  "Marrocos": ["Ziyech", "Hakimi", "En-Nesyri"],
+  "Senegal": ["Mané", "Koulibaly", "Mendy"],
+
+  "Suíça": ["Xhaka", "Shaqiri", "Sow"],
+  "Dinamarca": ["Eriksen", "Højbjerg", "Dolberg"],
+  "Noruega": ["Haaland", "Ødegaard", "Sørloth"],
+  "Polónia": ["Lewandowski", "Zielinski", "Szczesny"],
+  "Portugal B": ["Jogadores jovens"],
+
+  "Chile": ["Alexis Sánchez", "Vidal", "Brereton"],
+  "Colômbia": ["Luis Díaz", "James", "Duran"],
+  "Equador": ["Caicedo", "Valencia", "Hincapié"],
+  "Peru": ["Guerrero", "Tapia", "Cueva"],
+  "Paraguai": ["Almirón", "Romero", "Gómez"],
+
+  "Irão": ["Taremi", "Azmoun", "Hajsafi"],
+  "Arábia Saudita": ["Al-Dawsari", "Al-Shehri", "Al-Owais"],
+  "Qatar": ["Afif", "Almoez Ali", "Hassan"],
+  "Emirados Árabes": ["Caio", "Fabio Lima", "Al Ghassani"],
+  "Gana": ["Ayew", "Partey", "Inaki Williams"],
+
+  "Nigéria": ["Osimhen", "Iwobi", "Ndidi"],
+  "Tunísia": ["Sliti", "Dräger", "Maaloul"],
+  "Argélia": ["Mahrez", "Bounedjah", "Atal"],
+  "Costa do Marfim": ["Haller", "Kessié", "Pépé"],
+  "Camarões": ["Aboubakar", "Onana", "Anguissa"],
+
+  "Costa Rica": ["Navas", "Campbell", "Borges"],
+  "Panamá": ["Carrasquilla", "Gómez", "Escobar"],
+  "Honduras": ["Choco Lozano", "Quioto", "Menjívar"],
+  "Nova Zelândia": ["Wood", "Smith", "Payne"],
+  "Islândia": ["Sigurðsson", "Finnbogason", "Gunnarsson"]
+};
+
+/* =========================
+   FUNÇÕES
+========================= */
+
+function showTeams() {
+  document.getElementById("title").innerText = "⚽ Todas as Equipas (48)";
+
+  let html = "";
+
+  for (let team in teams) {
+    html += `
       <div class="card">
-        Seleciona uma opção no menu à esquerda
+        <h3>${team}</h3>
+        <p>${teams[team].join(", ")}</p>
       </div>
-    </div>
+    `;
+  }
 
-  </div>
+  document.getElementById("area").innerHTML = html;
+}
 
-  <script>
+function showCalendar() {
+  document.getElementById("title").innerText = "📅 Calendário";
 
-    /* =========================
-       EQUIPAS (48 SELEÇÕES BASE)
-    ========================== */
+  document.getElementById("area").innerHTML = `
+    <div class="card">Portugal vs Brasil - 12 Junho</div>
+    <div class="card">França vs Argentina - 13 Junho</div>
+    <div class="card">Inglaterra vs Alemanha - 14 Junho</div>
+  `;
+}
 
-    const equipas = {
-      "Portugal": ["Ronaldo", "Bruno Fernandes", "Bernardo Silva", "João Félix", "Rafael Leão"],
-      "Brasil": ["Vinícius Jr", "Neymar", "Rodrygo", "Alisson", "Marquinhos"],
-      "França": ["Mbappé", "Griezmann", "Camavinga", "Tchouaméni", "Upamecano"],
-      "Argentina": ["Messi", "Lautaro Martínez", "Enzo Fernández", "De Paul", "Otamendi"],
-      "Alemanha": ["Musiala", "Havertz", "Wirtz", "Kimmich", "Neuer"],
-      "Espanha": ["Pedri", "Gavi", "Morata", "Rodri", "Yamal"]
-    };
+function logout() {
+  window.location.href = "index.html";
+}
 
-    function showEquipas() {
-      document.getElementById("titulo").innerText = "⚽ Equipas do Mundial 2026";
-
-      let html = "";
-
-      for (let pais in equipas) {
-        html += `
-          <div class="card">
-            <h3>🇳🇱 ${pais}</h3>
-            <p>${equipas[pais].join(", ")}</p>
-          </div>
-        `;
-      }
-
-      document.getElementById("area").innerHTML = html;
-    }
-
-    /* =========================
-       CALENDÁRIO
-    ========================== */
-
-    function showCalendario() {
-      document.getElementById("titulo").innerText = "📅 Calendário";
-
-      document.getElementById("area").innerHTML = `
-        <div class="card">
-          <h3>Portugal vs Brasil</h3>
-          <p>12 Junho 2026</p>
-        </div>
-
-        <div class="card">
-          <h3>França vs Argentina</h3>
-          <p>13 Junho 2026</p>
-        </div>
-
-        <div class="card">
-          <h3>Alemanha vs Espanha</h3>
-          <p>14 Junho 2026</p>
-        </div>
-      `;
-    }
-
-    /* =========================
-       LOGOUT
-    ========================== */
-
-    function logout() {
-      window.location.href = "index.html";
-    }
-
-  </script>
+</script>
 
 </body>
 </html>
