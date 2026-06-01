@@ -2,92 +2,30 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>Mundial 2026 - App</title>
+<title>Mundial 2026 App</title>
 
 <style>
-
 html,body{
   margin:0;
   height:100%;
   font-family:Arial;
 }
 
-/* APP BASE */
-.app{
-  display:flex;
-  min-height:100vh;
-}
-
-/* SIDEBAR */
-.sidebar{
-  width:260px;
-  background:#0b3d91;
-  color:white;
-  padding:20px;
-}
-
-.sidebar h2{
-  color:#facc15;
-}
-
-.sidebar button{
-  width:100%;
-  padding:10px;
-  margin:5px 0;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-}
-
-/* CONTENT */
-.content{
-  flex:1;
-  position:relative;
-  padding:20px;
-  color:white;
-}
-
-/* BACKGROUND DINÂMICO */
-.bg{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background-size:cover;
-  background-position:center;
-  filter:brightness(0.35);
-  z-index:-1;
-}
-
-/* TEXTOS */
-h1{
-  text-align:center;
-  color:#facc15;
-}
-
-/* CARDS */
-.card{
-  background:rgba(255,255,255,0.15);
-  padding:12px;
-  margin:10px auto;
-  width:80%;
-  border-radius:10px;
-  text-align:center;
-  cursor:pointer;
-}
-
-.card:hover{
-  background:rgba(255,255,255,0.25);
-}
-
 /* LOGIN */
+#loginPage{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  background:#111827;
+  color:white;
+}
+
 .loginBox{
   display:flex;
   flex-direction:column;
   gap:10px;
-  width:250px;
-  margin:auto;
+  width:260px;
 }
 
 input{
@@ -104,26 +42,82 @@ button{
   cursor:pointer;
 }
 
+/* APP */
+.app{
+  display:none;
+  min-height:100vh;
+}
+
+.sidebar{
+  width:260px;
+  background:#0b3d91;
+  color:white;
+  padding:20px;
+}
+
+.sidebar h2{
+  color:#facc15;
+}
+
+.sidebar button{
+  width:100%;
+  margin:5px 0;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.content{
+  flex:1;
+  position:relative;
+  padding:20px;
+  color:white;
+}
+
+.bg{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-size:cover;
+  background-position:center;
+  filter:brightness(0.35);
+  z-index:-1;
+}
+
+h1{
+  text-align:center;
+  color:#facc15;
+}
+
+.card{
+  background:rgba(255,255,255,0.15);
+  padding:12px;
+  margin:10px auto;
+  width:80%;
+  border-radius:10px;
+  text-align:center;
+}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN VIEW -->
-<div id="loginPage" style="display:flex;justify-content:center;align-items:center;height:100vh;background:#111827;color:white;">
-
+<!-- LOGIN -->
+<div id="loginPage">
   <div class="loginBox">
-    <h2>⚽ Login Mundial 2026</h2>
+    <h2>⚽ Login</h2>
     <input id="email" placeholder="Email">
     <input id="password" type="password" placeholder="Password">
     <button onclick="login()">Entrar</button>
     <button onclick="registar()">Registar</button>
   </div>
-
 </div>
 
 <!-- APP -->
-<div class="app" id="app" style="display:none;">
+<div class="app" id="app">
 
   <div class="sidebar">
     <h2>⚽ Mundial 2026</h2>
@@ -133,22 +127,20 @@ button{
   </div>
 
   <div class="content">
-
     <div class="bg" id="bg"></div>
-
     <h1 id="title">Bem-vindo</h1>
     <div id="area"></div>
-
   </div>
 
 </div>
 
+<!-- FIREBASE -->
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword }
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+/* 🔥 OBRIGATÓRIO: substituir pelo teu Firebase real */
 const firebaseConfig = {
   apiKey: "COLOCA_AQUI",
   authDomain: "COLOCA_AQUI",
@@ -161,10 +153,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-/* LOGIN */
 window.login = function(){
-  let email=document.getElementById("email").value;
-  let pass=document.getElementById("password").value;
+  const email = document.getElementById("email").value;
+  const pass = document.getElementById("password").value;
 
   signInWithEmailAndPassword(auth,email,pass)
   .then(()=>{
@@ -175,46 +166,38 @@ window.login = function(){
 }
 
 window.registar = function(){
-  let email=document.getElementById("email").value;
-  let pass=document.getElementById("password").value;
+  const email = document.getElementById("email").value;
+  const pass = document.getElementById("password").value;
 
   createUserWithEmailAndPassword(auth,email,pass)
   .then(()=>alert("Conta criada"))
   .catch(e=>alert(e.message));
 }
-
 </script>
 
 <script>
 
-/* 48 EQUIPAS SIMPLIFICADAS */
+/* EQUIPAS */
 const teams = {
-"Portugal":"https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Portugal.svg",
-"Brasil":"https://upload.wikimedia.org/wikipedia/en/0/05/Flag_of_Brazil.svg",
-"França":"https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg",
-"Argentina":"https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Argentina.svg",
-"Alemanha":"https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg",
-"Espanha":"https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg",
-"Itália":"https://upload.wikimedia.org/wikipedia/en/0/03/Flag_of_Italy.svg",
-"Inglaterra":"https://upload.wikimedia.org/wikipedia/en/b/be/Flag_of_England.svg"
+  "Portugal":"https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Portugal.svg",
+  "Brasil":"https://upload.wikimedia.org/wikipedia/en/0/05/Flag_of_Brazil.svg",
+  "França":"https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg",
+  "Argentina":"https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Argentina.svg"
 };
 
-/* jogadores automáticos */
 function players(team){
   let arr=[];
   for(let i=1;i<=22;i++){
-    arr.push(team+" Jogador "+i);
+    arr.push(team+" jogador "+i);
   }
   return arr;
 }
 
-/* HOME */
 function home(){
   document.getElementById("title").innerText="Mundial 2026";
   document.getElementById("area").innerHTML="<div class='card'>Escolhe uma seleção</div>";
 }
 
-/* TEAMS */
 function showTeams(){
   document.getElementById("title").innerText="Equipas";
 
@@ -222,10 +205,10 @@ function showTeams(){
   for(let t in teams){
     html+=`<div class='card' onclick='openTeam("${t}")'>${t}</div>`;
   }
+
   document.getElementById("area").innerHTML=html;
 }
 
-/* OPEN TEAM */
 function openTeam(t){
   document.getElementById("bg").style.backgroundImage=`url(${teams[t]})`;
 
@@ -240,14 +223,12 @@ function openTeam(t){
   document.getElementById("area").innerHTML=html;
 }
 
-/* CALENDAR */
 function calendar(){
   document.getElementById("title").innerText="Calendário";
 
   document.getElementById("area").innerHTML=`
     <div class='card'>Portugal vs Brasil</div>
-    <div class='card'>França vs Alemanha</div>
-    <div class='card'>Argentina vs Espanha</div>
+    <div class='card'>França vs Argentina</div>
   `;
 }
 
