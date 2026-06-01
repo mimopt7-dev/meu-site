@@ -5,196 +5,171 @@
 <title>Mundial 2026</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #111827;
-  color: white;
-  display: flex;
+body{
+  margin:0;
+  font-family:Arial;
+  color:white;
+}
+
+/* FUNDO TOTAL PORTUGAL */
+.background{
+  min-height:100vh;
+  background:url("https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Portugal.svg") center/cover no-repeat;
+  position:relative;
+  display:flex;
+}
+
+/* ESCURECER FUNDO */
+.background::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.7);
 }
 
 /* SIDEBAR */
-.sidebar {
-  width: 250px;
-  background: #0b3d91;
-  height: 100vh;
-  padding: 20px;
+.sidebar{
+  width:250px;
+  background:rgba(11,61,145,0.9);
+  padding:20px;
+  position:relative;
+  z-index:1;
 }
 
-.sidebar h2 {
-  color: #facc15;
+.sidebar h2{
+  color:#facc15;
 }
 
-button {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  background: rgba(255,255,255,0.1);
-  color: white;
+button{
+  width:100%;
+  padding:10px;
+  margin:6px 0;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  background:rgba(255,255,255,0.1);
+  color:white;
 }
 
-button:hover {
-  background: #facc15;
-  color: black;
+button:hover{
+  background:#facc15;
+  color:black;
 }
 
 /* CONTENT */
-.content {
-  flex: 1;
-  padding: 20px;
+.content{
+  flex:1;
+  padding:20px;
+  position:relative;
+  z-index:1;
 }
 
 /* TITLE */
-#title {
+#title{
   text-align:center;
-  font-size:48px;
+  font-size:42px;
   color:#facc15;
   margin-top:10px;
 }
 
-/* BANNER */
-.banner {
+/* CARDS */
+.card{
+  background:rgba(255,255,255,0.15);
+  margin:10px auto;
+  padding:15px;
+  width:80%;
+  border-radius:10px;
   text-align:center;
-  margin:20px 0;
-  padding:20px;
-  background:rgba(255,255,255,0.08);
-  border-radius:15px;
+  backdrop-filter:blur(6px);
+  cursor:pointer;
 }
 
-.banner p {
-  opacity:0.9;
-}
-
-/* CARD */
-.card {
-  background: rgba(255,255,255,0.1);
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.card:hover {
-  background: rgba(255,255,255,0.2);
+.card:hover{
+  background:rgba(255,255,255,0.25);
 }
 </style>
 </head>
 
 <body>
 
-<!-- MENU -->
-<div class="sidebar">
-  <h2>⚽ Mundial 2026</h2>
+<div class="background">
 
-  <button onclick="showTeams()">Equipas</button>
-  <button onclick="showCalendar()">Calendário</button>
-  <button onclick="showHome()">Início</button>
-</div>
+  <!-- MENU -->
+  <div class="sidebar">
+    <h2>⚽ Mundial 2026</h2>
 
-<!-- CONTENT -->
-<div class="content">
-
-  <h1 id="title">⚽ Bem-vindo ao Mundial 2026</h1>
-
-  <div class="banner">
-    <p>O teu portal de equipas, jogadores e jogos em direto</p>
+    <button onclick="showHome()">Início</button>
+    <button onclick="showTeams()">Equipas</button>
+    <button onclick="showCalendar()">Calendário</button>
   </div>
 
-  <div id="area"></div>
+  <!-- CONTENT -->
+  <div class="content">
+
+    <h1 id="title">⚽ Bem-vindo ao Mundial 2026</h1>
+
+    <div id="area"></div>
+
+  </div>
 
 </div>
 
 <script>
 
 /* =========================
-   48 SELEÇÕES
+   EQUIPAS (EXEMPLO BASE)
 ========================= */
 
 const teams = {
-  "🇵🇹 Portugal": ["Ronaldo", "Bruno Fernandes", "Bernardo Silva", "João Félix", "Rafael Leão"],
-  "🇧🇷 Brasil": ["Vinícius Jr", "Neymar", "Rodrygo", "Alisson", "Casemiro"],
-  "🇦🇷 Argentina": ["Messi", "Lautaro Martínez", "Enzo Fernández", "De Paul"],
-  "🇫🇷 França": ["Mbappé", "Griezmann", "Camavinga", "Tchouaméni"],
-  "🇩🇪 Alemanha": ["Musiala", "Wirtz", "Kimmich", "Havertz"],
-  "🇪🇸 Espanha": ["Pedri", "Gavi", "Rodri", "Yamal"],
-  "🏴 Inglaterra": ["Kane", "Bellingham", "Saka", "Foden"],
-  "🇮🇹 Itália": ["Donnarumma", "Barella", "Chiesa", "Tonali"],
-  "🇳🇱 Holanda": ["De Jong", "Van Dijk", "Gakpo", "Simons"],
-  "🇧🇪 Bélgica": ["De Bruyne", "Lukaku", "Trossard"],
-
-  "🇺🇾 Uruguai": ["Valverde", "Núñez", "Bentancur"],
-  "🇭🇷 Croácia": ["Modric", "Kovacic", "Gvardiol"],
-  "🇲🇽 México": ["Jiménez", "Lozano", "Ochoa"],
-  "🇺🇸 EUA": ["Pulisic", "McKennie", "Reyna"],
-  "🇨🇦 Canadá": ["David", "Larin", "Buchanan"],
-
-  "🇯🇵 Japão": ["Kubo", "Mitoma", "Endo"],
-  "🇰🇷 Coreia do Sul": ["Son Heung-min", "Kim Min-jae", "Lee Kang-in"],
-  "🇦🇺 Austrália": ["Ryan", "Leckie", "Boyle"],
-  "🇲🇦 Marrocos": ["Hakimi", "Ziyech", "En-Nesyri"],
-  "🇸🇳 Senegal": ["Mané", "Koulibaly", "Mendy"],
-
-  "🇨🇭 Suíça": ["Xhaka", "Shaqiri", "Akanji"],
-  "🇩🇰 Dinamarca": ["Eriksen", "Højbjerg", "Schmeichel"],
-  "🇳🇴 Noruega": ["Haaland", "Ødegaard", "Sørloth"],
-  "🇵🇱 Polónia": ["Lewandowski", "Zielinski", "Szczesny"],
-
-  "🇨🇱 Chile": ["Alexis Sánchez", "Vidal", "Brereton"],
-  "🇨🇴 Colômbia": ["Luis Díaz", "James", "Duran"],
-  "🇪🇨 Equador": ["Caicedo", "Hincapié", "Valencia"],
-  "🇵🇪 Peru": ["Guerrero", "Cueva", "Tapia"],
-
-  "🇳🇬 Nigéria": ["Osimhen", "Iwobi", "Ndidi"],
-  "🇬🇭 Gana": ["Partey", "Ayew", "Inaki Williams"],
-  "🇨🇲 Camarões": ["Aboubakar", "Onana", "Anguissa"],
-
-  "🇪🇬 Egito": ["Salah", "Elneny", "Hegazi"],
-  "🇩🇿 Argélia": ["Mahrez", "Bounedjah", "Atal"],
-  "🇹🇳 Tunísia": ["Sliti", "Dräger", "Maaloul"],
-
-  "🇮🇷 Irão": ["Taremi", "Azmoun", "Hajsafi"],
-  "🇸🇦 Arábia Saudita": ["Al-Dawsari", "Al-Shehri", "Al-Owais"],
-  "🇶🇦 Qatar": ["Afif", "Almoez Ali", "Hassan"],
-
-  "🇵🇦 Panamá": ["Carrasquilla", "Gómez", "Escobar"],
-  "🇨🇷 Costa Rica": ["Navas", "Campbell", "Borges"],
-  "🇭🇳 Honduras": ["Quioto", "Lozano", "Menjívar"]
+  "🇵🇹 Portugal": ["Ronaldo", "Bruno Fernandes", "Bernardo Silva"],
+  "🇧🇷 Brasil": ["Vinícius Jr", "Neymar", "Rodrygo"],
+  "🇦🇷 Argentina": ["Messi", "Lautaro Martínez", "Enzo Fernández"],
+  "🇫🇷 França": ["Mbappé", "Griezmann", "Camavinga"],
+  "🇩🇪 Alemanha": ["Musiala", "Wirtz", "Kimmich"],
+  "🇪🇸 Espanha": ["Pedri", "Gavi", "Rodri"],
+  "🏴 Inglaterra": ["Kane", "Bellingham", "Saka"]
 };
 
 /* ========================= */
 
-function showTeams() {
+function showHome(){
+  document.getElementById("title").innerText = "⚽ Bem-vindo ao Mundial 2026";
+
+  document.getElementById("area").innerHTML = `
+    <div class="card">
+      🌍 Explora equipas, jogadores e jogos do maior torneio do mundo
+    </div>
+  `;
+}
+
+function showTeams(){
   document.getElementById("title").innerText = "⚽ Equipas";
 
   let html = "";
 
-  for (let t in teams) {
-    html += `
-      <div class="card" onclick="showPlayers('${t}')">
-        ${t}
-      </div>
-    `;
+  for(let t in teams){
+    html += `<div class="card" onclick="showPlayers('${t}')">${t}</div>`;
   }
 
   document.getElementById("area").innerHTML = html;
 }
 
-function showPlayers(team) {
+function showPlayers(team){
   document.getElementById("title").innerText = team;
 
   let html = `<div class="card" onclick="showTeams()">⬅ Voltar</div>`;
 
-  teams[team].forEach(p => {
+  teams[team].forEach(p=>{
     html += `<div class="card">${p}</div>`;
   });
 
   document.getElementById("area").innerHTML = html;
 }
 
-function showCalendar() {
+function showCalendar(){
   document.getElementById("title").innerText = "📅 Calendário";
 
   document.getElementById("area").innerHTML = `
@@ -204,13 +179,8 @@ function showCalendar() {
   `;
 }
 
-function showHome() {
-  document.getElementById("title").innerText = "⚽ Bem-vindo ao Mundial 2026";
-
-  document.getElementById("area").innerHTML = `
-    <div class="card">Explora equipas e jogadores do Mundial 🌍</div>
-  `;
-}
+/* INICIAL */
+showHome();
 
 </script>
 
