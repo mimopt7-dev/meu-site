@@ -13,7 +13,7 @@ body {
   display: flex;
 }
 
-/* MENU */
+/* SIDEBAR */
 .sidebar {
   width: 250px;
   background: #0b3d91;
@@ -47,6 +47,28 @@ button:hover {
   padding: 20px;
 }
 
+/* TITLE */
+#title {
+  text-align:center;
+  font-size:48px;
+  color:#facc15;
+  margin-top:10px;
+}
+
+/* BANNER */
+.banner {
+  text-align:center;
+  margin:20px 0;
+  padding:20px;
+  background:rgba(255,255,255,0.08);
+  border-radius:15px;
+}
+
+.banner p {
+  opacity:0.9;
+}
+
+/* CARD */
 .card {
   background: rgba(255,255,255,0.1);
   padding: 15px;
@@ -57,25 +79,30 @@ button:hover {
 
 .card:hover {
   background: rgba(255,255,255,0.2);
-  transform: scale(1.01);
-  transition: 0.2s;
 }
 </style>
 </head>
 
 <body>
 
+<!-- MENU -->
 <div class="sidebar">
   <h2>⚽ Mundial 2026</h2>
 
-  <button onclick="showTeams()">Equipas (48)</button>
+  <button onclick="showTeams()">Equipas</button>
   <button onclick="showCalendar()">Calendário</button>
   <button onclick="showHome()">Início</button>
 </div>
 
+<!-- CONTENT -->
 <div class="content">
 
-  <h1 id="title">Bem-vindo 👋</h1>
+  <h1 id="title">⚽ Bem-vindo ao Mundial 2026</h1>
+
+  <div class="banner">
+    <p>O teu portal de equipas, jogadores e jogos em direto</p>
+  </div>
+
   <div id="area"></div>
 
 </div>
@@ -83,7 +110,7 @@ button:hover {
 <script>
 
 /* =========================
-   48 SELEÇÕES + BANDEIRAS
+   48 SELEÇÕES
 ========================= */
 
 const teams = {
@@ -140,14 +167,14 @@ const teams = {
 /* ========================= */
 
 function showTeams() {
-  document.getElementById("title").innerText = "⚽ Equipas do Mundial 2026";
+  document.getElementById("title").innerText = "⚽ Equipas";
 
   let html = "";
 
-  for (let team in teams) {
+  for (let t in teams) {
     html += `
-      <div class="card" onclick="showPlayers('${team}')">
-        ${team}
+      <div class="card" onclick="showPlayers('${t}')">
+        ${t}
       </div>
     `;
   }
@@ -160,8 +187,8 @@ function showPlayers(team) {
 
   let html = `<div class="card" onclick="showTeams()">⬅ Voltar</div>`;
 
-  teams[team].forEach(player => {
-    html += `<div class="card">${player}</div>`;
+  teams[team].forEach(p => {
+    html += `<div class="card">${p}</div>`;
   });
 
   document.getElementById("area").innerHTML = html;
@@ -178,10 +205,10 @@ function showCalendar() {
 }
 
 function showHome() {
-  document.getElementById("title").innerText = "Bem-vindo 👋";
+  document.getElementById("title").innerText = "⚽ Bem-vindo ao Mundial 2026";
 
   document.getElementById("area").innerHTML = `
-    <div class="card">Seleciona uma equipa para ver jogadores ⚽</div>
+    <div class="card">Explora equipas e jogadores do Mundial 🌍</div>
   `;
 }
 
